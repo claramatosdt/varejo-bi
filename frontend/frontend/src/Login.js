@@ -2,9 +2,9 @@ import { useState } from 'react';
 import './App.css';
 
 const usuarios = [
-  { username: "admin", password: "1234" },
-  { username: "gestor", password: "1234" },
-  { username: "analista", password: "1234" }
+  { username: "admin", password: "1234", tipo: "admin"},
+  { username: "gestor", password: "1234", tipo: "gestor" },
+  { username: "analista", password: "1234", tipo: "analista" }
 ];
 
 function Login({ onLogin }) {

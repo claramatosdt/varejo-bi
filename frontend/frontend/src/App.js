@@ -55,7 +55,26 @@ function App() {
 
   const total = dados.reduce((a, b) => a + b.valor, 0);
 
+ const media = dados.length ? (total / dados.length).toFixed(2) : 0;
+
+ const maior = dados.length
+      ? Math.max (...dados.map(v => v.valor || 0))
+      : 0;
+
+      const produtos = {};
+      
+      dados.forEach (v => {
+      if (!produtos[v.produto]) {
+      produtos[v.produto] = 0;
+      }
+      produtos[v.produto] += v.valor || 0;
+      });
+
+      const ranking =Object.entries(produtos)
+      .sort((a,b) => b[1] - a[1]);
+
   return (
+
     <div className="container">
 
       <h2>Bem-vindo, {usuario.username} 👋</h2>
@@ -81,6 +100,32 @@ function App() {
           <h3>Total de Vendas</h3>
           <p>R$ {total}</p>
         </div>
+
+  <div className="card">
+          <h3>Média</h3>
+          <p>R$ {media}</p>
+        </div>
+
+
+        
+  <div className="card">
+          <h3>Maior venda</h3>
+          <p>R$ {maior}</p>
+        </div>
+         
+         <div className="card">
+  <h3>🏆 Ranking de Produtos</h3>
+
+  <ul>
+    {ranking.slice(0, 5).map(([produto, total], i) => (
+      <li key={i}>
+        {i + 1}º - {produto}: R$ {total}
+      </li>
+    ))}
+  </ul>
+</div>
+
+
 
         <div className="card">
           <h3>Quantidade</h3>

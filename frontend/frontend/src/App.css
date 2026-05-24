@@ -128,3 +128,42 @@ button:hover {
   line-height: 1.5;
   color: #cbd5f5;
 }
+
+.dashboard {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: #1e1e2f;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 180px;
+  flex: 1;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+}
+
+.container {
+  padding: 20px;
+  font-family: Arial;
+  background: #0f0f1a;
+  min-height: 100vh;
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.card li {
+  margin: 8px 0;
+  background: #2a2a40;
+  padding: 8px;
+  border-radius: 6px;
+}
