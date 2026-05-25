@@ -4,11 +4,13 @@ import './App.css';
 import Login from './Login';
 
 
+
 const API = "https://musical-fishstick-r4pp9p547qqgf5g97-3000.app.github.dev";
 
 function App() {
   const [dados, setDados] = useState([]);
   const [usuario, setUsuario] = useState(null);
+  const [filtroData, setFiltroData] = useState("");
 
 
   const carregar = async () => {
@@ -30,10 +32,15 @@ function App() {
 
     const linhas = text.split('\n');
 
-    const dadosFormatados = linhas.map(l => {
-      const [produto, valor] = l.split(',');
-      return { produto, valor: Number(valor) };
-    });
+   const dadosFormatados = linhas.map(l => {
+  const [produto, valor, data] = l.split(',');
+
+  return {
+    produto,
+    valor: Number(valor),
+      data: data?.trim() 
+  };
+});
 
     await axios.post(`${API}/vendas`, dadosFormatados);
     carregar();
@@ -53,17 +60,21 @@ function App() {
     carregar();
   };
 
-  const total = dados.reduce((a, b) => a + b.valor, 0);
+  const dadosFiltrados = filtroData
+  ? dados.filter(v => v.data === filtroData)
+  : dados;  
 
- const media = dados.length ? (total / dados.length).toFixed(2) : 0;
+  const total = dadosFiltrados.reduce((a, b) => a + b.valor, 0);
 
- const maior = dados.length
-      ? Math.max (...dados.map(v => v.valor || 0))
+ const media = dadosFiltrados.length ? (total / dadosFiltrados.length).toFixed(2) : 0;
+
+ const maior = dadosFiltrados.length
+      ? Math.max (...dadosFiltrados.map(v => v.valor || 0))
       : 0;
 
       const produtos = {};
       
-      dados.forEach (v => {
+      dadosFiltrados.forEach (v => {
       if (!produtos[v.produto]) {
       produtos[v.produto] = 0;
       }
@@ -72,6 +83,14 @@ function App() {
 
       const ranking =Object.entries(produtos)
       .sort((a,b) => b[1] - a[1]);
+
+
+
+      const dadosGrafico = ranking.map(([produto, total]) => ({
+  produto,
+  total
+
+}));
 
   return (
 
@@ -89,6 +108,18 @@ function App() {
       <button onClick={() => setUsuario(null)}>Sair</button>
 
       <h1>📊 Varejo BI Dashboard</h1>
+    
+
+
+      <div className="card">
+  <h3>Filtro</h3>
+
+  <input
+    type="date"
+    value={filtroData}
+    onChange={(e) => setFiltroData(e.target.value)}
+  />
+</div>
 
       <div className="card upload">
         <h3>Importar Planilha</h3>
@@ -129,7 +160,7 @@ function App() {
 
         <div className="card">
           <h3>Quantidade</h3>
-          <p>{dados.length}</p>
+          <p>{dadosFiltrados.length}</p>
         </div>
       </div>
 
@@ -145,7 +176,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {dados.map(v => (
+            {dadosFiltrados.map(v => (
               <tr key={v.id}>
                 <td>{v.produto}</td>
                 <td>R$ {v.valor}</td>

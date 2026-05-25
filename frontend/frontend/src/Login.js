@@ -26,8 +26,20 @@ function Login({ onLogin }) {
 
   return (
     <div className="login-container">
+
+      {/* TEXTO ESQUERDA */}
+      <div className="login-info">
+         <div className="emoji">📊</div>
+        
+        <h1>Bem-vindo ao Varejo BI</h1>
+        <p>
+          Analise suas métricas para tomar decisões mais assertivas para o seu varejo.
+        </p>
+      </div>
+
+      {/* LOGIN DIREITA */}
       <div className="login-box">
-        <h2>🔐 Login</h2>
+        <h2>🔒Login</h2>
 
         <input
           type="text"
@@ -47,6 +59,7 @@ function Login({ onLogin }) {
 
         {erro && <p className="erro">{erro}</p>}
       </div>
+
     </div>
   );
 }
