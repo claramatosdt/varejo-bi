@@ -4,7 +4,6 @@ import './App.css';
 import Login from './Login';
 
 
-
 const API = "https://musical-fishstick-r4pp9p547qqgf5g97-3000.app.github.dev";
 
 function App() {
@@ -85,12 +84,26 @@ function App() {
       .sort((a,b) => b[1] - a[1]);
 
 
+const alertas = [];
 
-      const dadosGrafico = ranking.map(([produto, total]) => ({
-  produto,
-  total
+if (maior > 200) {
+  alertas.push("🔥 Venda muito alta detectada!");
+}
 
-}));
+if (media < 100 && dadosFiltrados.length > 0) {
+  alertas.push("⚠️ Média de vendas baixa!");
+}
+
+if (dadosFiltrados.length === 0) {
+  alertas.push("📭 Nenhum dado encontrado para o filtro selecionado.");
+}
+
+// produto com baixo desempenho
+ranking.slice(-1).forEach(([produto, total]) => {
+  if (total < 100) {
+    alertas.push(`📉 Produto com baixo desempenho: ${produto}`);
+  }
+});
 
   return (
 
@@ -109,21 +122,57 @@ function App() {
 
       <h1>📊 Varejo BI Dashboard</h1>
     
+    {alertas.length > 0 && (
+  <div className="card" style={{ background: "#1e293b5" }}>
+    <h3>🚨 Alertas</h3>
+    <ul>
+      {alertas.map((a, i) => (
+        <li key={i}>{a}</li>
+      ))}
+    </ul>
+  </div>
+)}
 
 
       <div className="card">
-  <h3>Filtro</h3>
+  <h3>📅Filtro</h3>
 
   <input
     type="date"
     value={filtroData}
     onChange={(e) => setFiltroData(e.target.value)}
+    style={{
+      width: "200px",
+      padding: "10px",
+      borderRadius: "8px",
+      border: "1px solid #2563eb",
+      marginTop: "8px",
+      fontSize: "14px",
+      outline: "none"
+    }}
   />
 </div>
 
       <div className="card upload">
-        <h3>Importar Planilha</h3>
-        <input type="file" onChange={importar} />
+        <h3>📂Importar Planilha</h3>
+        <label
+    style={{
+      display: "inline-block",
+      background: "#2563eb",
+      color: "#fff",
+      padding: "10px 16px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontWeight: "500"
+    }}
+  >
+    Selecionar arquivo
+    <input
+      type="file"
+      onChange={importar}
+      style={{ display: "none" }}
+    />
+  </label>
       </div>
 
       <div className="dashboard">
